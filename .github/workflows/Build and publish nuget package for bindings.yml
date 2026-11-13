@@ -24,7 +24,15 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v5
       with:
-        dotnet-version: 10.0.x  
+        dotnet-version: 10.0.x
+
+    - name: Cache NuGet packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.fsproj', '**/*.csproj', '**/packages.lock.json', 'build.fsx') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
 
     - name: NuGet login (OIDC -> short-lived API key)
       id: nuget-login
